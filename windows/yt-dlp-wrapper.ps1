@@ -23,9 +23,9 @@ $video_title = Join-Path -Path $video_dir -ChildPath "'\%(title)s.%(ext)s'"
 $val = 0
 $url = ""
 $dl_val = 0
-$yt_sig_location = Join-Path -Path $current_dir -ChildPath '\sig\SHA2-512SUMS'
+$yt_sig_location = Join-Path -Path $current_dir -ChildPath '\sig\yt-dlp-windows.sha512'
 $yt_current_sig = certutil.exe -hashfile $exe_location SHA512
-$ffmpeg_sig_location = Join-Path -Path $current_dir -ChildPath '\sig\checksums.sha256'
+$ffmpeg_sig_location = Join-Path -Path $current_dir -ChildPath '\sig\ffmpeg-windows.sha256'
 $ffmpeg_current_sig = certutil.exe -hashfile $ffmpeg_location SHA256
 $yt_sig_eq_check = Select-String -Path $yt_sig_location -Pattern $yt_current_sig -SimpleMatch -Quiet
 $ffmpeg_sig_eq_check = Select-String -Path $ffmpeg_sig_location -Pattern $ffmpeg_current_sig -SimpleMatch -Quiet
@@ -140,12 +140,12 @@ if($exe_test -eq $true) {
 
 Write-Output "Updating ffmpeg signature..."
 # Download new ffmpeg signature
-Invoke-WebRequest https://github.com/arthur-taft/ffmpeg-latest-signatures/releases/latest/download/checksums.sha256 -OutFile $ffmpeg_sig_location
+Invoke-WebRequest https://github.com/arthur-taft/ffmpeg-latest-signatures/releases/latest/download/ffmpeg-windows.sha256 -OutFile $ffmpeg_sig_location
 Write-Output "Done!"
 
 Write-Output "Updating yt-dlp signature..."
 # Download new yt-dlp signature
-Invoke-WebRequest https://github.com/arthur-taft/yt-dlp-signatures/releases/latest/download/SHA2-512SUMS -OutFile $yt_sig_location
+Invoke-WebRequest https://github.com/arthur-taft/yt-dlp-signatures/releases/latest/download/yt-dlp-windows.sha512 -OutFile $yt_sig_location
 Write-Output "Done!"
 
 if($yt_sig_eq_check -ne $true) {
