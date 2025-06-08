@@ -61,6 +61,8 @@ exe_location="$current_dir/bin/yt-dlp"
 ffmpeg_location="/usr/bin/ffmpeg"
 audio_dir="$current_dir/audio"
 video_dir="$current_dir/video"
+generated_signature="$current_dir/exe_sig.sha512"
+upstream_signature="$current_dir/sig/yt-dlp-linux.sha512"
 val=0
 dl_val=0
 url=""
@@ -70,6 +72,9 @@ batch_dl_file="$current_dir/batch-dl.txt"
 
 # Ensure bin directory exists
 mkdir -p "$current_dir/bin"
+
+# Ensure sig directory exists
+mkdir -p "$current_dir/sig"
 
 # Function to download audio
 audio_dl () {
@@ -90,7 +95,8 @@ video_dl_batch () {
 }
 
 # Function to single download
-single_dl ("$dl_val") {
+single_dl () {
+    local dl_val="$dl_val"
     while [ "$dl_val" -ne 1 ]; do
         read -p "Audio or Video?: " format
 
@@ -112,7 +118,8 @@ single_dl ("$dl_val") {
     done
 }
 # Function to batch download
-batch_dl ("$dl_val") {
+batch_dl () {
+    local dl_val="$dl_val"
     while [ "$dl_val" -ne 1 ]; do
         read -p "Audio or Video?: " format
 
@@ -132,12 +139,24 @@ batch_dl ("$dl_val") {
     done
 }
 
-# Remove existing executable (if it exists)
-[ -f "$exe_location" ] && rm "$exe_location"
+# Pull yt-dlp cert
+wget -q -O "$current_dir/sig/yt-dlp-linux.sha512" https://github.com/arthur-taft/yt-dlp-signatures/releases/latest/download/yt-dlp-linux.sha512
 
-# Download yt-dlp
-wget -q -O "$exe_location" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
-chmod +x "$exe_location"
+# Generate signature for binary
+sha512sum "$exe_location" > "$current_dir/exe_sig.sha512" && sed 's/.\{8\}$//' "$current_dir/exe_sig.sha512"
+
+# Check if signatures match
+if ! grep -Ff "$current_dir/exe_sig.sha512" "$current_dir/sig/yt-dlp-linux.sha512"; then
+    echo "Old verion of yt-dlp detected downloading now"
+    # Remove existing executable (if it exists)
+    [ -f "$exe_location" ] && rm "$exe_location"
+
+    # Download yt-dlp
+    wget -q -O "$exe_location" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+    chmod +x "$exe_location"
+
+    rm "$current_dir/exe_sig.sha512"
+fi
 
 # Create directories if they don't exist
 mkdir -p "$audio_dir"
