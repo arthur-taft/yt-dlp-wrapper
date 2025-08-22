@@ -1,6 +1,15 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+
+bin/
+include/
+lib/
+lib64
+share/
+pyvenv.cfg
 windows/audio/
 windows/video/
-windows/work/
-
 linux/audio/
 linux/video/
+universal/audio/
+universal/video/
+universal/__pycache__/
