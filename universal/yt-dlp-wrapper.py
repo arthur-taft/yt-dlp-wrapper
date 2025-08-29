@@ -26,9 +26,9 @@ def batch_convert():
 
     match format:
         case "audio":
-            run(['yt-dlp', '-x', '-f', '"ba"', '--audio-format', 'mp3', '-o', f'{audio_title}', '-a', f'{batch_dl_file}'])
+            run(['yt-dlp', '-x', '-f', 'ba', '--audio-format', 'mp3', '-o', f'{audio_title}', '-a', f'{batch_dl_file}'])
         case "video":
-            run(['yt-dlp', '-f', '"bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b"', '--sponsorblock-remove', 'sponsor,selfpromo,interaction', '-o', f'{video_title}', '-a', f'{batch_dl_file}'])
+            run(['yt-dlp', '-f', 'bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b', '--sponsorblock-remove', 'sponsor,selfpromo,interaction', '-o', f'{video_title}', '-a', f'{batch_dl_file}'])
         case _:
             print("Response must be 'Audio' or 'Video'!")
 
@@ -43,7 +43,7 @@ def normal_convert():
 
         match format:
             case "audio":
-                run(['yt-dlp', '-x', '-f', '"ba"', '--audio-format', 'mp3', '-o', f'{audio_title}', f'{url}'])   
+                run(['yt-dlp', '-x', '-f', 'ba', '--audio-format', 'mp3', '-o', f'{audio_title}', f'{url}'])   
                 while val != True:
                     do_continue = str(input("Do you want to convert another file? (y/n): ")).lower()
                     match do_continue:
@@ -55,7 +55,7 @@ def normal_convert():
                         case _:
                             print("Answer must be Y or N!")
             case "video":
-                run(['yt-dlp', '-f', '"bv*[ext=mkv]+ba[ext=m4a]/b[ext=mkv] / bv*+ba/b"', '--sponsorblock-remove', 'sponsor,selfpromo,interaction', '-o', f'{video_title}', f'{url}'])
+                run(['yt-dlp', '-f', 'bv*[ext=mkv]+ba[ext=m4a]/b[ext=mkv] / bv*+ba/b', '--sponsorblock-remove', 'sponsor,selfpromo,interaction', '-o', f'{video_title}', f'{url}'])
                 while val != True:
                     do_continue = str(input("Do you want to convert another file? (y/n): ")).lower()
                     match do_continue:
@@ -69,7 +69,7 @@ def normal_convert():
             case _:
                 print("Response must be 'Audio' or 'Video'!")
 
-run(['pip', 'install', '-r', f'{requirements}'])
+run(['pip', 'install', '--update', '-r', f'{requirements}'])
 
 if not audio_dir.exists():
     audio_dir.mkdir()
