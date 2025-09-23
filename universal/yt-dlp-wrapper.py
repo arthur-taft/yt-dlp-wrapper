@@ -43,7 +43,7 @@ def normal_convert():
 
         match format:
             case "audio":
-                run(['yt-dlp', '-x', '-f', 'ba', '--audio-format', 'mp3', '-o', f'{audio_title}', f'{url}'])   
+                run(['yt-dlp', '-x', '-f', 'ba', '--audio-format', 'wav', '-o', f'{audio_title}', f'{url}'])   
                 while val != True:
                     do_continue = str(input("Do you want to convert another file? (y/n): ")).lower()
                     match do_continue:
@@ -69,7 +69,7 @@ def normal_convert():
             case _:
                 print("Response must be 'Audio' or 'Video'!")
 
-run(['pip', 'install', '--update', '-r', f'{requirements}'])
+run(['pip', 'install', '--upgrade', '-r', f'{requirements}'])
 
 if not audio_dir.exists():
     audio_dir.mkdir()
